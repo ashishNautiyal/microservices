@@ -1,0 +1,9 @@
+package com.hertz.solar.service;
+
+
+import com.hertz.solar.entity.ScadaConfigration;
+
+public interface ScadaConfigurationService {
+	public ScadaConfigration saveScadaConfiguration(ScadaConfigration scadaconfiguration) ;
+
+}

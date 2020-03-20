@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="addUpdate"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="true"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="addUpdate"/>
+			<item value="form-horizontal"/>
+			<item value="nav-tabs-custom"/>
+			<item value="content"/>
+			<item value="activePrivilage33"/>
+			<item value="col-md-12"/>
+			<item value="log4j-core"/>
+			<item value="processSheet"/>
+			<item value="readExcel"/>
+			<item value="processSheetHSSF"/>
+			<item value="readExcelHSSF"/>
+			<item value="readCSVFileAllObjects"/>
+			<item value="configName"/>
+			<item value="fileUploadScadaAutomation"/>
+			<item value="jsonToSelectOptionHtml"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="217"/>
+		<item key="DIALOG_Y_ORIGIN" value="136"/>
+		<item key="DIALOG_WIDTH" value="350"/>
+		<item key="DIALOG_HEIGHT" value="474"/>
+		<item key="DIALOG_FONT_NAME" value="1|Cantarell|11.0|0|GTK|1|"/>
+	</section>
+</section>

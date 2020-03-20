@@ -1,0 +1,7 @@
+package com.hertz.solar.serviceimpl;
+
+import com.hertz.solar.service.ScadaConfigService;
+
+public class ScadaConfigServiceImpl implements ScadaConfigService {
+
+}

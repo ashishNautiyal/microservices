@@ -1,0 +1,34 @@
+spring.mvc.view.prefix:/WEB-INF/jsp/
+spring.mvc.view.suffix:.jsp
+server.port=8081
+spring.data.mongodb.authentication-database=admin
+spring.data.mongodb.username=root
+spring.data.mongodb.password=admin@1212
+spring.data.mongodb.database=test_db
+spring.data.mongodb.port=27017
+spring.data.mongodb.host=localhost
+scadaAutomationConfigfile.upload.path=/home/user/scada_data_val/
+
+# Basic Log4j Configuration with STDOUT and File logging
+log4j.rootLogger=INFO, console, file, gelf
+
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{HH:mm:ss.SSS} - %-5p - %m -> [%l]%n
+
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{HH:mm:ss.SSS} - %-5p - %m -> [%l]%n
+log4j.appender.file.File=${app_home}/logs/app.log
+log4j.appender.file.MaxFileSize=10MB
+log4j.appender.file.MaxBackupIndex=4
+log4j.appender.file.append=true
+
+log4j.appender.gelf=biz.paluch.logging.gelf.log4j.GelfLogAppender
+log4j.appender.gelf.Threshold=INFO
+log4j.appender.gelf.Host=tcp:127.0.0.1
+log4j.appender.gelf.Port=12201
+log4j.appender.gelf.OriginHost=server_dev_log4j
+log4j.appender.gelf.ExtractStackTrace=true
+log4j.appender.gelf.FilterStackTrace=true
+log4j.appender.gelf.MaximumMessageSize=8192

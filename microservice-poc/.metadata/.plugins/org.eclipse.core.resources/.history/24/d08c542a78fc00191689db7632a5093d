@@ -1,0 +1,10 @@
+log4j2.rootLogger=ERROR, loggerId  
+log4j2.appender.loggerId=org.apache.log4j.rolling.RollingFileAppender  
+log4j2.appender.loggerId.rollingPolicy=org.apache.log4j.rolling.FixedWindowRollingPolicy  
+log4j2.appender.loggerId.rollingPolicy.maxIndex=5  
+log4j2.appender.loggerId.triggeringPolicy=org.apache.log4j.rolling.SizeBasedTriggeringPolicy  
+log4j2.appender.loggerId.triggeringPolicy.MaxFileSize=10485760 
+log4j2.appender.loggerId.rollingPolicy.FileNamePattern=/home/wind/test/log/SPFS-WEBAPP-%d{yyyyMMdd.HHmmss}%i.log.gz
+log4j2.appender.loggerId.rollingPolicy.ActiveFileName=/home/wind/test/log/SPFS-WEBAPP.log
+log4j2.appender.loggerId.layout=org.apache.log4j.PatternLayout  
+log4j2.appender.loggerId.layout.ConversionPattern=%d [%t] %-5p (%F:%L) - %m%n

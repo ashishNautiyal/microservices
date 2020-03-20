@@ -1,0 +1,10 @@
+package com.hertz.solar.serviceimpl;
+
+import org.springframework.stereotype.Service;
+
+import com.hertz.solar.service.ScadaConfigService;
+
+@Service("scadaConfigService")
+public class ScadaConfigServiceImpl implements ScadaConfigService {
+
+}

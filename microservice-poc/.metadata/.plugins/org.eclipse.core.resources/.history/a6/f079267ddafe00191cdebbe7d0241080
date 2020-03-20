@@ -1,0 +1,31 @@
+package com.hertz.solar.serviceimpl;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.hertz.solar.entity.ScadaConfigration;
+import com.hertz.solar.repository.ScadaConfigurationRepository;
+import com.hertz.solar.service.ScadaAutomationConfigurationService;
+
+@Service("scadaConfigurationService")
+public class ScadaConfigurationServiceImpl implements ScadaAutomationConfigurationService {
+	
+	@Resource
+	ScadaConfigurationRepository scadaConfigurationRepository;
+
+	@Override
+	public ScadaConfigration saveScadaConfiguration(ScadaConfigration scadaconfiguration) {
+		ScadaConfigration scadaconfig=null;
+		try
+		{
+			 scadaconfig=this.scadaConfigurationRepository.save(scadaconfiguration);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		return scadaconfig;
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.hertz.solar.repository;
+
+public class PoolingStationRepository {
+
+}

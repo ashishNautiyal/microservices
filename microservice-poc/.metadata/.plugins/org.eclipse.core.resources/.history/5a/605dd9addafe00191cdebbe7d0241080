@@ -1,0 +1,5 @@
+package com.hertz.solar.serviceimpl;
+
+public class ScadaConfigServiceImpl {
+
+}

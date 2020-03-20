@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="30">
+	<Appenders>
+		<Console name="Console-Appender" target="SYSTEM_OUT">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %C - %msg%n
+				</pattern>
+			</PatternLayout>
+		</Console>
+		<RollingFile name="Rolling-File-Appender"
+			fileName="${sys:catalina.base}/logs/sel-webapp.log"
+			filePattern="${sys:catalina.base}/logs/sel-webapp-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout
+				pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %C - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+			<!-- <DefaultRolloverStrategy max="10" /> -->
+		</RollingFile>
+	<!--   <Gelf name="gelf" host="tcp:192.168.1.153" port="12201" version="1.1"> 
+			<Field name="timestamp" pattern="%d{dd MMM yyyy HH:mm:ss,SSS}" /> <Field 
+			name="level" pattern="%level" /> <Field name="simpleClassName" pattern="%C{1}" 
+			/> <Field name="className" pattern="%C" /> <Field name="server" pattern="ashish-desktop" 
+			/> <Field name="server.fqdn" pattern="%host{fqdn}" /> <Field name="server.fqcn" 
+			pattern="%host{fqcn}" /> </Gelf>   -->
+			
+			   <!-- <GELF name="graylog" server="192.168.1.153" port="12201" hostName="ddocserver">
+    </GELF> -->
+		<!-- <gelf name="graylog" class="org.graylog2.log.GelfAppender">
+			<param name="graylogHost" value="192.168.1.153" />
+			<param name="originHost" value="ashish-desktop" />
+			<param name="graylogPort" value="12201" />
+			<param name="extractStacktrace" value="true" />
+			<param name="addExtendedInformation" value="true" />
+			<param name="facility" value="log4j2" />
+			<param name="Threshold" value="INFO" />
+			<param name="additionalFields"
+				value="{'environment': 'DEV', 'application': 'GraylogDemoApplication'}" />
+		</gelf>  -->
+	
+		  <appender name="gelf" host="udp:192.168.1.153" port="12201" version="1.1"
+            extractStackTrace="true" filterStackTrace="true" mdcProfiling="true"
+            includeFullMdc="true" maximumMessageSize="8192" originHost="%host{fqdn}">
+            <Field name="timestamp" pattern="%d{dd MMM yyyy HH:mm:ss,SSS}" />
+            <Field name="level" pattern="%level" />
+            <Field name="simpleClassName" pattern="%C{1}" />
+            <Field name="className" pattern="%C" />
+            <Field name="server" pattern="%host" />
+            <Field name="server.fqdn" pattern="%host{fqdn}" />
+            <Field name="server.fqcn" pattern="%host{fqcn}" />
+        </appender> 
+	</Appenders>
+
+	<Loggers>
+		<Logger name="com.hertz.solar" level="info" includeLocation="true"
+			additivity="false">
+			<AppenderRef ref="Rolling-File-Appender" /> 
+			<AppenderRef ref="graylog" />
+			<AppenderRef ref="Console-Appender" />
+		</Logger>
+		<Root level="info">
+			<AppenderRef ref="Rolling-File-Appender" /> 
+			<AppenderRef ref="graylog"  />
+
+
+		</Root>
+		
+		
+    
+	</Loggers>
+</Configuration>

@@ -1,0 +1,9 @@
+package com.hertz.solar.repository;
+
+import org.springframework.aop.target.PoolingConfig;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+
+public interface  PoolingStationRepository extends MongoRepository<PoolingConfig, String>  {
+
+}

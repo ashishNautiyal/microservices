@@ -1,0 +1,8 @@
+package com.hertz.solar.entity;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "scada_config")
+public class ScadaConfig {
+
+}

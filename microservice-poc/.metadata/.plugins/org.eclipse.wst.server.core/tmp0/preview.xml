@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<server port="8080">
+  <module context="new-re-1" name="new-re-1" path="/home/user/microservice-poc/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/new-re-1" type="j2ee"/>
+</server>

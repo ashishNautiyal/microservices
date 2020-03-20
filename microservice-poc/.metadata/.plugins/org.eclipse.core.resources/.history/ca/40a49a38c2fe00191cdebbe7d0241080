@@ -1,0 +1,12 @@
+package com.hertz.solar.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ScadaConfigController {
+	
+
+	
+	
+
+}

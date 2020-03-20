@@ -1,0 +1,37 @@
+package com.hertz.solar.serviceimpl;
+
+import javax.annotation.Resource;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import com.hertz.solar.controller.ScadaAutomationController;
+import com.hertz.solar.entity.ScadaConfigration;
+import com.hertz.solar.repository.ScadaConfigurationRepository;
+import com.hertz.solar.service.ScadaAutomationConfigurationService;
+
+@Service("scadaAutomationConfigurationService")
+public class ScadaAutomationConfigurationServiceImpl implements ScadaAutomationConfigurationService {
+	
+	
+	private static final Logger logger = LogManager.getLogger(ScadaAutomationConfigurationServiceImpl.class.getName());
+
+	@Resource
+	ScadaConfigurationRepository scadaConfigurationRepository;
+
+	@Override
+	public ScadaConfigration saveScadaConfiguration(ScadaConfigration scadaconfiguration) {
+		ScadaConfigration scadaconfig=null;
+		try
+		{
+			 scadaconfig=this.scadaConfigurationRepository.save(scadaconfiguration);
+		}
+		catch(Exception e)
+		{
+			logger.error(e);
+		}
+		return scadaconfig;
+	}
+
+}

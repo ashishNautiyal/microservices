@@ -1,0 +1,2032 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:page="urn:jsptagdir:/WEB-INF/tags/form"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields"
+	xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+
+
+	<link rel="stylesheet" type="text/css"
+		href="${pageContext.request.contextPath}/resources/styles/datatables.min.css">
+		<!-- Test --></link>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/Javascript/datatables.min.js">
+	<!-- Test -->
+		
+	</script>
+
+
+
+	<!-- CSS Start Here  -->
+	<script
+		src="${pageContext.request.contextPath}/resources/Bootstrap/js/bootstrap.min.js"
+		type="text/javascript">
+	<!--  Bootstrap JS-->
+		
+	</script>
+	<link
+		href="${pageContext.request.contextPath}/resources/Bootstrap/css/bootstrap.min.css"
+		rel="stylesheet">
+		<!-- dfasdf --></link>
+	<link
+		href="${pageContext.request.contextPath}/resources/Bootstrap/css/font-awesome.min.css"
+		rel="stylesheet">
+		<!-- dfasdf --></link>
+	<link rel="stylesheet" type="text/css"
+		href="${pageContext.request.contextPath}/resources/Bootstrap/css/daterangepicker-bs3.css">
+		<!-- dfasdf --></link>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/Bootstrap/js/moment.js">
+	<!-- Date Range Picker -->
+		
+	</script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/Bootstrap/js/daterangepicker.js">
+	<!-- Date Range Picker -->
+		
+	</script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/Javascript/highstock.js">
+	<!-- Highchart API -->
+		
+	</script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/Javascript/scheduleRevisionGraph.js">
+	<!-- Schedule Revision Graph -->
+		
+	</script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/Bootstrap/js/jquery-ui.js">
+	<!-- Date Range Picker -->
+		
+	</script>
+
+	<link
+		href="${pageContext.request.contextPath}/resources/clockPicker/bootstrap-clockpicker.min.css"
+		type="text/css" rel="stylesheet">
+		<!-- Clock js Commented by Atul--></link>
+	<script
+		src="${pageContext.request.contextPath}/resources/clockPicker/jquery-clockpicker.min.js"
+		type="text/javascript">
+	<!-- Clock js Commented by Atul-->
+		
+	</script>
+	<style>
+.fullView #Schedulechart {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	background: #fff;
+	z-index: 99999;
+}
+
+#ScheduleContainer .graphZoomIn, #ScheduleContainer .graphZoomOut {
+	float: right;
+	position: absolute;
+	right: 20px;
+	z-index: 9999999;
+	cursor: pointer;
+}
+
+#ScheduleContainer .graphZoomOut {
+	display: none;
+}
+
+.fullView .graphZoomIn {
+	display: none;
+}
+
+.fullView .graphZoomOut {
+	display: inline-block !important;
+	position: fixed !important;
+	top: 5px;
+}
+
+.noDataFound {
+	background: url("resources/images/noDataFound.png");
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
+.form-group button {
+	margin-left: 5px;
+}
+
+.errorMsg {
+	color: #dd4b39;
+	margin-top: 5px;
+	display: inline-block;
+}
+
+.required {
+	color: red;
+	margin-left: 5px;
+}
+
+.scheduleRevisionGraph {
+	overflow: hidden;
+	zoom: 1;
+	border-bottom: 1px solid #EBEBEB;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+}
+
+.scheduleRevisionGraph .col-sm-22 {
+	float: left;
+	width: 25%;
+}
+
+.scheduleRevisionGraph .col-sm-22 label {
+	width: 95%;
+	margin: 0px 10px 5px 0px;
+}
+
+.scheduleRevisionGraph select {
+	width: 100%;
+	padding: 2px 0px;
+}
+
+.scheduleRevisionGraph #reportrange span, .scheduleRevisionGraph #reportrange,
+	.scheduleRevisionGraph select {
+	font-weight: normal;
+}
+
+.appname {
+	margin-bottom: 5px;
+}
+
+.scheduleSubmit,.sendScheduleEmail, .fileupload, .copyRevision { /* display: none; */
+	float: left;
+	padding: 4px 5px;
+	background-color: #dbdbdb;
+	border-radius: 3px 3px;
+	margin-bottom: 5px;
+	color: #000;
+	cursor: pointer;
+	border: 1px solid #8a8686;
+}
+
+.copyRevision {
+	margin-left: 10px;
+}
+
+.showDetailsTable>span {
+	display: inline-block;
+	float: right;
+	padding: 4px 5px;
+	background-color: #dbdbdb;
+	border-radius: 3px 3px;
+	margin-bottom: 5px;
+	color: #000;
+	cursor: pointer;
+	border: 1px solid #8a8686;
+}
+
+.showDetailsTable>span:hover, .sendScheduleEmail:hover, .fileupload:hover
+	{
+	background-color: #8a8686;
+}
+
+.Schedulelist table th {
+	background: #1E5283 !important;
+}
+
+.Schedulelist {
+	overflow: hidden;
+	zoom: 1;
+	clear: both;
+	display: none;
+}
+/* .tableList{width:1056px;;margin:0px auto;table-layout: fixed;border-collapse: collapse;}
+.tableList th,.tableList td {padding: 5px;text-align: left;}
+.tableList td:nth-child(1), .tableList th:nth-child(1){min-width: 134px;}
+.tableList td:nth-child(2), .tableList th:nth-child(2) {min-width: 175px;}
+.tableList td:nth-child(3), .tableList th:nth-child(3) {min-width: 175px;}
+.tableList td:nth-child(4), .tableList th:nth-child(4) {min-width: 170px;}
+.tableList td:nth-child(5), .tableList th:nth-child(5) {min-width: 175px;}
+.tableList td:nth-child(6), .tableList th:nth-child(6) { min-width: 150px;}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {padding:4px 3px!important;}
+.tableList thead {background-color: #3C8DBC;color: #fdfdfd;}
+.tableList thead tr {display: block;position: relative;}
+.tableList tbody {display: block;overflow-y: auto;overflow-x:hidden; width: 100%;max-height: 460px;margin-top: -2px!important; background: #fff;} */
+.uploadFile .modal-title, .copyPreviousrevision .modal-title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.copyPreviousrevision .form-group {
+	overflow: hidden;
+	zoom: 1;
+	margin-bottom: 5px;
+}
+
+.copyPreviousrevision .modal-dialog {
+	max-width: 450px;
+}
+
+.uploadFile  .modal-content, .copyPreviousrevision .modal-content {
+	border-radius: 5px 5px;
+}
+
+.copyPreviousrevision .modal-body {
+	overflow: hidden;
+	zoom: 1;
+}
+</style>
+
+
+
+	<fmt:formatDate pattern="dd/MM/yyyy"
+		value="${schedules[0].forecastDate }" var="scheduleDate" />
+	<fmt:formatDate pattern="dd/MM/yyyy" value="${date1}" var="date1" />
+	<input type="hidden" class="dateForRedirect" value="${date1}" /> <input
+		type="hidden" class="poolinStationNameForRedirect"
+		value="${poolingSatation1.name}" /> 
+		<input type="hidden"
+		class="sldcname" value="${poolingSatation1.sldc.name}" />
+
+
+	<!-- Schedule With Revision No -->
+	<h3 class="appname">Schedule By Pooling Station</h3>
+
+	<!-- Header Section -->
+	<div class="iclear scheduleRevisionGraph">
+
+		<div class="col-sm-22">
+			<label>Schedule Date :</label> <label> <input type="hidden"
+				id="rangeDateto" /> <input type="hidden" id="rangeDatefrom" />
+				<div id="reportrange"
+					style="background: #fff; cursor: pointer; padding: 2px 5px; border: 1px solid #ccc">
+					<span></span>
+				</div>
+			</label>
+		</div>
+
+		<div class="col-sm-22">
+			<label>Pooling Station :</label> <label><select name="pname"
+				class="poolingStationValue">
+					<option value="">-Select Pooling Station-</option>
+					<c:forEach var="poolingstationName" items="${poolingStationList}">
+						<option value="${poolingstationName.id}">${poolingstationName.name}</option>
+					</c:forEach>
+			</select> </label>
+		</div>
+
+
+
+		<div class="col-sm-22">
+			<label>Revision No.:</label> <label><select name="revno"
+				class="revision">
+					<option value="">-Select Revision No-</option>
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+			</select> </label>
+		</div>
+	</div>
+	<!-- Header Section -->
+
+
+	<!-- Graph Space -->
+	<div id="ScheduleContainer">
+
+		<span class="graphZoomIn"><img
+			src="${pageContext.request.contextPath}/resources/images/fullScreen.jpg" /></span>
+		<span class="graphZoomOut"><img
+			src="${pageContext.request.contextPath}/resources/images/fullScreen.jpg" /></span>
+
+		<!--Author   :Atul Kumar Shukla Progress bar module-->
+		<div class="modal fade" id="progressModel" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Please Wait</h4>
+					</div>
+					<div class="modal-body center-block">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped active"
+								role="progressbar" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100" style="width: 100%">Getting Data From
+								Server. Please Wait....</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--Author   :Atul Kumar Shukla Progress Bar-->
+
+
+		<!--Author   :Atul Kumar Shukla Process File Details-->
+		<div class="modal fade" id="processFileModel" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Processes File Data</h4>
+					</div>
+					<div class="modal-body center-block" id="ProcessFileDetails">
+						<!--   -->
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--Author   :Atul Kumar Shukla Process File Details-->
+
+		<!--Author   :Atul Kumar Shukla File Upload-->
+		<div class="modal fade" id="fileUploadModel" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">File upload</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+
+						<c:choose>
+							<c:when
+								test="${poolingSatation1.sldc.name ne 'Rajasthan Rajya Vidyut prasaran nagar limited'}">
+								<div id="notRaj">
+									<form method="post" action="schedules/save"
+										commandName="uploadForm" enctype="multipart/form-data">
+
+										<div class="form-group" style="overflow: hidden; zoom: 1">
+											<label class="col-xs-3 control-label">Browse File <span
+												class="required" title="Mandatory">*</span></label>
+											<div class="col-xs-8">
+												<!-- Dynamic Set Details -->
+												<input type="hidden" name="date" class="uploadStartDate" />
+												<input type="hidden" name="n" class="uploadEndDate" /> <input
+													type="hidden" name="pname" class="uploadPSUid" /> <input
+													type="hidden" name="revno" class="uploadrevisionNo" />
+												<!-- Dynamic Set Details -->
+												<input type="file" name="files[0]" id="file"
+													class="form-control uploadfilenameSchedule" /> <span></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-xs-9 col-xs-offset-3">
+												<button type="submit"
+													class="btn btn-primary pull-right submitb"
+													id="submitDataImport">Submit</button>
+												<button type="button"
+													class="btn btn-default pull-right cancelb"
+													data-dismiss="modal">Cancel</button>
+
+											</div>
+										</div>
+
+									</form>
+								</div>
+							</c:when>
+							<c:otherwise>
+
+								<div id="Raj">
+									<form method="post" action="schedules/fileUploaddata"
+										commandName="uploadForm" enctype="multipart/form-data">
+
+										<div class="form-group" style="overflow: hidden; zoom: 1">
+											<label class="col-xs-3 control-label">Browse File <span
+												class="required" title="Mandatory">*</span></label>
+											<div class="col-xs-8">
+												<!-- Dynamic Set Details -->
+												<input type="hidden" name="date" class="uploadStartDate" />
+												<input type="hidden" name="n" class="uploadEndDate" /> <input
+													type="hidden" name="pname" class="uploadPSUid" /> <input
+													type="hidden" name="revno" class="uploadrevisionNo" />
+												<!-- Dynamic Set Details -->
+												<input type="file" name="files[0]" id="file"
+													class="form-control uploadfilenameSchedule" /> <span></span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-xs-9 col-xs-offset-3">
+												<button type="button"
+													class="btn btn-primary pull-right submitb"
+													id="submitDataImportData">Submit</button>
+												<button type="button"
+													class="btn btn-default pull-right cancelb"
+													data-dismiss="modal">Cancel</button>
+
+											</div>
+										</div>
+
+									</form>
+								</div>
+							</c:otherwise>
+						</c:choose>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
+
+		<!--Author   :Atul Kumar Shukla  File Upload-->
+
+		<!--Author   :Atul Kumar Shukla Send Schedule e-Mail-->
+		<div class="modal fade" id="mailSendModel" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Send Schedule
+							e-Mail</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+						<p>Are you sure you want to Send Schedule e-Mail ?</p>
+						<br />
+
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button type="button" class="btn btn-primary pull-right submitb"
+									id="submitemailSchedule">Yes</button>
+								<button type="button" class="btn btn-default pull-right cancelb"
+									data-dismiss="modal">No</button>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<!--schedule Data Model  -->
+
+
+		<div class="modal fade" id="scheduleDatamodel" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Warning!!!</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+						<div id="scheduleTable">
+							<!-- Table bind -->
+						</div>
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button type="button" class="btn btn-primary pull-right submitb"
+									id="submitScheduleData">Process</button>
+								<button type="button" class="btn btn-default pull-right cancelb"
+									data-dismiss="modal">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Author   :Atul Kumar Shukla  Send Schedule e-Mail Resp-->
+
+		<!--Author   :Atul Kumar Shukla Send Schedule e-Mail-->
+		<div class="modal fade" id="mailSendModelResp" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Success</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+						<p id="sendMail"></p>
+						<br />
+
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button type="button" class="btn btn-primary pull-right cancelb"
+									data-dismiss="modal">Ok</button>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<!-- ProcessedFile Show-->
+
+
+
+		<div class="modal fade" id="mailSendModel" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Show Data</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+						<p>Show ProcessesFile Data</p>
+						<br />
+
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<table>
+									<thead>
+										<th>Block No</th>
+										<th>Power</th>
+										<th>FileName</th>
+										<th>Date</th>
+										<th>Forcaster</th>
+									</thead>
+									<tbody id="dataOfPowerForcaster"></tbody>
+
+								</table>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<!--Author   :Atul Kumar Shukla  Send Schedule e-Mail Resp-->
+
+		<!-- Copy Revision -->
+		<div class=" modal fade copyPreviousrevision"
+			id="copyPreviousrevision" tabindex="-1" role="dialog"
+			aria-labelledby="copyPreviousrevision" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title">Copy Previous Revision</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">Copy From <span
+								class="required" title="Mandatory">*</span></label>
+							<div class="col-xs-7 ">
+								<select class="form-control copyScheduleRevisionNo"><option
+										value="" max="0">-Select Revision No.-</option>
+
+
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">Copy For <span
+								class="required" title="Mandatory">*</span></label>
+							<div class="col-xs-7 ">
+								<input type="text" class="form-control copyRevisionNo"
+									placeholder="Ex: 5" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">Rev. from TB <span
+								class="required" title="Mandatory">*</span></label>
+							<div class="col-xs-7 ">
+								<input type="text" class="form-control copyRevisionTimeBlock"
+									placeholder="Ex: hh:mm" />
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button type="button" class="btn btn-primary pull-right"
+									id="submitDataCopyRevision">Submit</button>
+								<button type="button" class="btn btn-default pull-right cancelb"
+									data-dismiss="modal">Cancel</button>
+
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- Copy Revision -->
+
+		<!--Author   :Atul Kumar Shukla  Copy Revision Confirmation-->
+		<div class="modal fade" id="confirmCopyRevision" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close confirmClose"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Copy Confirmation</h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+						<p id="copyConfirm"></p>
+						<br />
+
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button type="button" class="btn btn-primary pull-right"
+									id="submitDataCopyRevisionConfirm">OK</button>
+								<button type="button"
+									class="btn btn-default pull-right cancelb confirmClose">Cancel</button>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<!--Author   :Atul Kumar Shukla  Copy Revision Confirmation-->
+
+		<!--Author   :Atul Kumar Shukla  Copy Revision Confirmation Message-->
+		<div class="modal fade" id="confirmCopyRevisionMessage" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close confirmRespClose"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabelConfirm"></h4>
+					</div>
+					<div class="modal-body center-block"
+						style="overflow: hidden; zoom: 1;">
+						<p class="confirmContent"></p>
+						<br />
+
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button type="button"
+									class="btn btn-primary pull-right confirmRespClose">OK</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<!--Author   :Atul Kumar Shukla  Copy Revision Confirmation Message-->
+
+
+		<div id="Schedulechart" style="height: 400px; width: 100%;">
+			<!-- Graph -->
+		</div>
+
+		<!-- Details Table -->
+
+		<c:choose>
+			<c:when
+				test="${poolingSatation1.sldc.name eq 'Rajasthan Rajya Vidyut prasaran nagar limited'}">
+				<div class="showDetailsTable" id="divRaj">
+
+					<span title="Show Details" class="dtls">Show Details</span><span
+						title="Download Last Revision File" style="margin-right: 10px;"
+						class="downloadl" onclick="downloadExel()">Download Last
+						Revision File</span>
+					<div title="Send Schedule e-Mail" style="margin-right: 10px;"
+						data-toggle="modal" data-target="#emailsend"
+						class="sendScheduleEmail">Send Schedule e-Mail</div>
+						<div title="Schedule Submit To SLDC" style="margin-right: 10px;"
+						data-toggle="modal" 
+						class="scheduleSubmit">Schedule Submit To SLDC</div>
+					<div title="File upload" class="fileupload" data-toggle="modal"
+						data-target="#fileUploadModal">File upload</div>
+					<div title="Copy Previous Revision" class="copyRevision"
+						data-toggle="modal">Copy Previous Revision</div>
+					<br />
+
+					<div class="Schedulelist ">
+						<table
+							class="table table-bordered table-hover stripe row-border order-column no-footer tableList datatableDynamicBind">
+							<thead>
+								<tr>
+									<th>Schedule Date</th>
+									<th>Revision Number</th>
+									<th>Block Number</th>
+									<th>Time Block</th>
+									<th>Schedule Power (MW)</th>
+									<th>Actual Power (MW)</th>
+									<th>SEMS Provisional</th>
+									<th>SEMS Final</th>
+									<th>Processed File</th>
+								</tr>
+							</thead>
+							<tbody id="dataTable">
+							</tbody>
+						</table>
+					</div>
+
+
+				</div>
+
+			</c:when>
+
+			<c:otherwise>
+
+
+				<div class="showDetailsTable" id="otherpool">
+
+					<span title="Show Details" class="dtls">Show Details</span><span
+						title="Download Last Revision File" style="margin-right: 10px;"
+						class="exportcsv">Download Last Revision File</span>
+					<div title="Send Schedule e-Mail" style="margin-right: 10px;"
+						data-toggle="modal" data-target="#emailsend"
+						class="sendScheduleEmail">Send Schedule e-Mail</div>
+					<div title="File upload" class="fileupload" data-toggle="modal"
+						data-target="#fileUploadModal">File upload</div>
+					<div title="Copy Previous Revision" class="copyRevision"
+						data-toggle="modal">Copy Previous Revision</div>
+					<br />
+
+					<div class="Schedulelist ">
+						<table
+							class="table table-bordered table-hover stripe row-border order-column no-footer tableList datatableDynamicBind">
+							<thead>
+								<tr>
+									<th>Schedule Date</th>
+									<th>Revision Number</th>
+									<th>Block Number</th>
+									<th>Time Block</th>
+									<th>Schedule Power (MW)</th>
+									<th>Actual Power (MW)</th>
+									<th>SEMS Provisional</th>
+									<th>SEMS Final</th>
+									<th>Processed File</th>
+								</tr>
+							</thead>
+							<tbody id="dataTable">
+							</tbody>
+						</table>
+					</div>
+
+
+				</div>
+
+			</c:otherwise>
+		</c:choose>
+
+		<!-- Details Table -->
+
+
+	</div>
+	<!-- Graph Space -->
+
+
+	<!-- Schedule With Revision No -->
+
+
+	<style type="text/css">
+.slice text {
+	font-size: 16pt;
+	font-family: Arial;
+}
+
+.copyPreviousrevision input[type='text'], .copyPreviousrevision select {
+	border-radius: 5px 5px !important;
+	border-width: 1px !important;
+}
+
+.error {
+	border: 1px solid #bb3b3b;
+}
+
+.errorTxt {
+	color: red;
+	font-size: 11px;
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+.Schedulelist table {
+	display: block !important;
+}
+</style>
+	<script>
+		//<![CDATA[
+		//Copy Schedule Revision 
+		var requestJSONCopyRevision = [];
+		var copyStatus = false;
+		
+		
+		$(document).ready(function() {
+
+							//Admin, Operation and Sub Admin
+
+							if ("${SPRING_SECURITY_CONTEXT.authentication.authorities[0]}" == "0"
+									|| "${SPRING_SECURITY_CONTEXT.authentication.authorities[0]}" == "3"
+									|| "${SPRING_SECURITY_CONTEXT.authentication.authorities[0]}" == "6") {
+								$(".copyRevision").show();
+							} else {
+								$(".copyRevision").remove();
+							}
+
+							$('.datatableDynamicBind').DataTable({
+								"scrollY" : "400px",
+								"scrollCollapse" : true,
+								"paging" : false,
+								"ordering" : false,
+								"info" : false
+							});
+
+						});
+
+		function getScheduleRevisionData() {
+			var requestJSON = [];
+			var startDate = $("#rangeDateto").val();
+			var endDate = $("#rangeDatefrom").val();
+			var poolingStationName = '';
+			var poolingStation = $(".poolingStationValue option:selected")
+					.val();
+			if (poolingStation != null) {
+				poolingStationName = $(".poolingStationValue option:selected")
+						.text();
+				var revisionNo = $(".revision").val();
+				if (revisionNo == "") {
+					revisionNo = "-1";
+				}
+				$('#progressModel').modal('show');
+				requestJSON.push({
+					date : startDate,
+					todate : endDate,
+					DateForredirect : startDate,
+					poolinStationNameForRedirect : poolingStationName,
+					poolinstationName : poolingStation,
+					revno : revisionNo
+				});
+				AjaxCalling(
+						"${pageContext.request.contextPath}/schedules/valuesForSchedule",
+						JSON.stringify(requestJSON), getScheduleRevbisionData);
+
+				//Copy Schedule Revision
+				var objPoolingStation = {
+					"uid" : poolingStation
+				};
+				allSchduleRevisionIntervalList = [];
+				AjaxCallingGET(
+						"${pageContext.request.contextPath}/schedules/schRevIntByPoolUid",
+						objPoolingStation,
+						getPoolingStationScheduleRevisionList);
+				//Copy Schedule Revision
+
+			}
+
+		}
+
+		function getPoolingStationScheduleRevisionList(data) {
+			allSchduleRevisionIntervalList = data;
+		}
+
+		function ManualTriggringForMail() {
+			var jsondata = '';
+			var json = '[';
+			json += '{';
+			var datevalue = $('#rangeDateto').val();
+			var poolinStationName = $('.poolingStationValue').val();
+			var revno = $('.revision').val();
+			var todate = $('#rangeDatefrom').val();
+			var DateForredirect = $('#rangeDateto').text();
+			var poolinStationNameForRedirect = $('.poolingStationValue').val();
+			json += '"date":"' + datevalue + '"';
+			json += ',"todate":"' + todate + '"';
+			json += ',"DateForredirect":"' + DateForredirect + '"';
+			json += ',"poolinStationNameForRedirect":"'
+					+ poolinStationNameForRedirect + '"';
+			json += ',"poolinstationName":"' + poolinStationName + '"';
+			json += ',"revno":"' + revno + '"';
+			json += '}';
+			json += ']';
+
+			jsondata = json;
+			AjaxCalling(
+					"${pageContext.request.contextPath}/schedules/manualTriggringForMailing",
+					jsondata, EmailSendTrigger);
+
+		}
+		var a = "${status1}";
+		console.log(a);
+
+		try {
+
+			if (a != "") {
+				$(document).ready(function() {
+					alert(a);
+				});
+			}
+		} catch (e) {
+			console.log(e, 'Status Error');
+		}
+
+		$(document)
+				.on(
+						'keypress keyup',
+						'.tableList tr td:nth-child(5) input[type="text"]',
+						function(event) {
+
+							if ($(this).val() != ""
+									&& $(this).val() != undefined) {
+
+								$(this).closest("tr").addClass("UpdatePwrData");
+								var decimal = "yes";
+								var element = this;
+								var charCode = (event.which) ? event.which
+										: event.keyCode;
+
+								if (decimal != "" && decimal != undefined
+										&& decimal == "yes") {
+									if ((charCode != 45 || $(element).val()
+											.indexOf('-') != 0)
+											&& (charCode != 46 || $(element)
+													.val().indexOf('.') != -1)
+											&& ((charCode < 48 && charCode != 8) || charCode > 57)) {
+										event.preventDefault();
+
+									}
+								} else {
+									if ((charCode != 45 || $(element).val()
+											.indexOf('-') != 0)
+											&& (charCode != 46 || $(element)
+													.val().indexOf('.') != -0)
+											&& ((charCode < 48 && charCode != 8) || charCode > 57)) {
+										event.preventDefault();
+									}
+
+								}
+
+								if ($(this).val().indexOf('.') != -1) {
+									if ($(this).val().split(".")[1].length > 2) {
+										$(this).val(
+												parseFloat($(this).val())
+														.toFixed(2));
+									}
+								}
+
+								var code = event.keyCode || event.which;
+								if (code == 13) {
+
+									event.stopImmediatePropagation();
+
+									var scheduePower = $(this).closest(
+											"tr.updateSchedule").find(
+											"td:nth-child(5)").find(
+											"input[type='text']").val();
+									var blockNo = $(this).closest(
+											"tr.updateSchedule").find(
+											"td:nth-child(3)").html();
+
+									if (scheduePower == ""
+											|| scheduePower == null) {
+										scheduePower = 0;
+										;
+									}
+
+									var datevalue = $('#rangeDateto').val();
+									var poolinStationName = $(
+											'.poolingStationValue').val();
+									var jsondata = '';
+									var json = '[';
+									json += '{';
+									json += '"date":"' + datevalue + '"';
+									json += ',"poolinStationName":"'
+											+ poolinStationName + '"';
+									json += ',"volumn":"' + scheduePower + '"';
+									json += ',"revno":"'
+											+ revisionNoForCurrentBlock + '"';
+									json += ',"blockno":"' + blockNo + '"';
+
+									json += '}';
+									json += ']';
+									jsondata = json;
+									var returndata = updatingForScheduleBlock(
+											"${pageContext.request.contextPath}/schedules/updateScheduleBlocks",
+											jsondata);
+
+								}
+
+							}
+						});
+
+		//	debugger;
+		function updatingForScheduleBlock(methodName, jsondata) {
+			var datareturn = '';
+			try {
+				$.ajax({
+					type : "POST",
+					url : methodName,
+					data : jsondata,
+					contentType : "application/json; charset=utf-8",
+					/* dataType: "json", */success : function(data) {
+						datareturn = data;
+
+						return data; //alert(datareturn);
+					}
+				});
+			} catch (ex) {
+				console.log(ex, 'Error')
+			}
+			return datareturn;
+		}
+
+		$(document).on('focusout',
+				'#dataTable tr td:nth-child(5) input[type="text"]',
+				function(event) {
+
+					if (!$(this).val() != "" && !$(this).val() != undefined) {
+						$(this).val('0');
+					}
+
+				});
+
+		$(document)
+				.on(
+						'click',
+						'#dataTable tr td:nth-child(9) input[type="button"]',
+						function(event) {
+							var blocknumber = $(this).closest("tr").attr(
+									"blocknumber");
+							event.stopImmediatePropagation();
+							var revno = $('.revision').val();
+							var poolinStationName = $('.poolingStationValue')
+									.val();
+							var datevalue = $('#rangeDateto').val();
+							var jsondata = '';
+							var json = '[';
+							json += '{';
+							json += '"date":"' + datevalue + '"';
+							json += ',"poolinStationName":"'
+									+ poolinStationName + '"';
+							json += ',"revno":"' + revno + '"';
+							json += ',"blockno":"' + blocknumber + '"';
+							json += '}';
+							json += ']';
+							jsondata = json;
+							var returndata = powerForcastBlockBlock(
+									"${pageContext.request.contextPath}/schedules/powerForcastBlock",
+									jsondata);
+
+						});
+
+		function powerForcastBlockBlock(methodName, jsondata) {
+
+			var datareturn = '';
+			try {
+				$
+						.ajax({
+							type : "POST",
+							url : methodName,
+							data : jsondata,
+							contentType : "application/json; charset=utf-8",
+							/* dataType: "json", */success : function(data) {
+								datareturn = data;
+								console.log(data)
+
+								if (data[0].blockNo == null) {
+									$("#ProcessFileDetails")
+											.html(
+													'<p>Schedule Block Data Not Found .</p>');
+								} else if (data[0].processedFileDate == "null") {
+									var processDetails = '<table class="processFileBox"><tbody><tr><td><b>Time Block: </b></td><td>'
+											+ data[0].blockNo
+											+ '</td></tr><tr><td><b>Forcaster Name: </b></td><td>'
+											+ data[0].forcasterName
+											+ '</td></tr><tr><td><b>Last Modified Date: </b></td><td>'
+											+ data[0].modified_date
+											+ '</td></tr><tr><td><b>Forecasted Power: </b></td><td>'
+											+ data[0].powervolume
+											+ ' (MW)</td></tr></tbody></table>';
+									$("#ProcessFileDetails").html(
+											processDetails);
+								} else if (data[0].forrcasterName == "null") {
+									var processDetails = '<table class="processFileBox"><tbody><tr><td><b>Time Block: </b></td><td>'
+											+ data[0].blockNo
+											+ '</td></tr><tr><td><b>Pooling Station: </b></td><td>'
+											+ $(
+													".poolingStationValue option:selected")
+													.text()
+											+ ' </td></tr><tr><td><b>Forecaster: </b></td><td>'
+											+ data[0].forcaster
+											+ ' </td></tr><tr><td><b>Forecasted Power: </b></td><td>'
+											+ data[0].power
+											+ ' (MW)</td></tr><tr><td><b>Process Date: </b></td><td>'
+											+ data[0].dateOfPowerForcast
+											+ '</td></tr><tr><td><b>Forecast File Name: </b></td><td>'
+											+ data[0].filename
+											+ '</td></tr></tbody></table>';
+									$("#ProcessFileDetails").html(
+											processDetails);
+								} else {
+									var processDetails = '<table class="processFileBox"><tbody><tr><td><b>Time Block: </b></td><td>'
+											+ data[0].blockNo
+											+ '</td></tr><tr><td><b>Forcaster Name: </b></td><td>'
+											+ data[0].forcasterName
+											+ '</td></tr><tr><td><b>Last Modified Date: </b></td><td>'
+											+ data[0].modified_date
+											+ '</td></tr><tr><td><b>Forecasted Power: </b></td><td>'
+											+ data[0].powervolume
+											+ ' (MW)</td></tr><tr><td><b>Orignal File Name: </b></td><td>'
+											+ data[0].orignalFileName
+											+ ' </td></tr><tr><td><b>File Processed Date: </b></td><td>'
+											+ data[0].processedFileDate
+											+ ' </td></tr></tbody></table>';
+									$("#ProcessFileDetails").html(
+											processDetails);
+								}
+
+								$("#processFileModel").modal('show');
+
+								return data; //alert(datareturn);
+							}
+						});
+			} catch (ex) {
+				console.log(ex, 'Error')
+			}
+			return datareturn;
+		}
+
+		/*Copy Revison Interval*/
+
+		$(document)
+				.ready(
+						function() {
+
+							$(document)
+									.on(
+											'click',
+											'#confirmCopyRevision .confirmClose',
+											function(event) {
+												$("#confirmCopyRevision")
+														.modal('hide');
+												$("#copyPreviousrevision")
+														.modal('show');
+											});
+
+							$(document)
+									.on(
+											'click',
+											'#confirmCopyRevision #submitDataCopyRevisionConfirm',
+											function(event) {
+
+												//Submit Copy Schedule Revision
+												AjaxCalling(
+														"${pageContext.request.contextPath}/schedules/copyPreRev",
+														JSON
+																.stringify(requestJSONCopyRevision),
+														getCopyScheduleRevisionResponse);
+
+											});
+
+							$(document)
+									.on(
+											'click',
+											'#confirmCopyRevisionMessage .confirmRespClose',
+											function(event) {
+
+												$("#confirmCopyRevisionMessage")
+														.modal("hide");
+
+												if (copyStatus) {
+													var getRevisionNo = $(
+															document)
+															.find(
+																	"#copyPreviousrevision .copyRevisionNo")
+															.val();
+													$(document).find(
+															".revision").val(
+															getRevisionNo);
+													$(document).find(
+															".revision")
+															.trigger("change");
+												}
+
+											});
+
+							$(document)
+									.on(
+											'keydown',
+											'#copyPreviousrevision .copyRevisionTimeBlock',
+											function(event) {
+												event.preventDefault();
+											});
+
+							$(document)
+									.on(
+											"focus",
+											"#copyPreviousrevision .copyRevisionTimeBlock",
+											function() {
+
+												$(this).closest(".col-xs-7")
+														.find(".errorTxt")
+														.remove();
+
+												var clock = $(this);
+												clock.clockpicker({
+													autoclose : true
+												});
+
+												// minutes
+												clock.clockpicker('show')
+														.clockpicker(
+																'toggleView',
+																'minutes');
+
+												// hours
+												clock.clockpicker('show')
+														.clockpicker(
+																'toggleView',
+																'hours');
+											});
+
+							//Schedule Copy Revision Model Open
+							$(document)
+									.on(
+											"click",
+											".copyRevision",
+											function() {
+
+												var poolingStationUid = $(
+														".poolingStationValue option:selected")
+														.val();
+
+												$(document)
+														.find(
+																"#copyPreviousrevision .copyScheduleRevisionNo")
+														.html('');
+												$(document)
+														.find(
+																"#copyPreviousrevision input[type='text']")
+														.val('');
+
+												if (poolingStationUid != ""
+														&& poolingStationUid != undefined) {
+													$("#copyPreviousrevision")
+															.find(
+																	"select,input[type='text']")
+															.removeClass(
+																	"error");
+													$("#copyPreviousrevision")
+															.find(
+																	".copyRevisionNo")
+															.attr("disabled",
+																	"disabled");
+													$("#copyPreviousrevision")
+															.find(".errorTxt")
+															.remove();
+													$("#copyPreviousrevision")
+															.modal('show');
+													//Bind Revision List
+													bindScheduleRevisionList(
+															poolingStationUid,
+															latestRevisionCount);
+												}
+
+											});
+
+							//Check Max Revision Validation
+							$(document)
+									.on(
+											'change',
+											'#copyPreviousrevision .copyScheduleRevisionNo',
+											function(event) {
+												if ($(this).val() != ""
+														&& $(this).val() != undefined) {
+													$(this)
+															.removeClass(
+																	"error");
+												} else {
+													$(this).addClass("error");
+												}
+
+												//Check Validation
+												var copyRevFrom = $(document)
+														.find(
+																"#copyPreviousrevision .copyScheduleRevisionNo")
+														.val();
+												var copyForRev = $(document)
+														.find(
+																'#copyPreviousrevision .copyRevisionNo')
+														.val();
+												var selector = $(document)
+														.find(
+																"#copyPreviousrevision .copyScheduleRevisionNo");
+
+												$(selector)
+														.closest(".col-xs-7")
+														.find(".errorTxt")
+														.remove();
+
+												if (copyRevFrom == copyForRev) {
+													$(selector).addClass(
+															"error");
+													$(selector)
+															.closest(
+																	".col-xs-7")
+															.append(
+																	"<span class='errorTxt'>Same revision number shall not be copied.</span>");
+
+												} else {
+													$(selector).removeClass(
+															"error");
+													$(selector).closest(
+															".col-xs-7").find(
+															".errorTxt")
+															.remove();
+												}
+
+												$(document)
+														.find(
+																"#copyPreviousrevision .copyRevisionNo")
+														.trigger("focusout");
+											});
+
+							//Check Max Revision Validation
+							$(document)
+									.on(
+											'keydown',
+											'#copyPreviousrevision .copyRevisionNo',
+											function(event) {
+												//prevent using shift with numbers
+												if (event.shiftKey == true) {
+													event.preventDefault();
+												}
+												if (event.keyCode == 190) {
+													event.preventDefault();
+												}
+												if (!((event.keyCode == 190)
+														|| (event.keyCode >= 48 && event.keyCode <= 57)
+														|| (event.keyCode >= 96 && event.keyCode <= 105)
+														|| event.keyCode == 8
+														|| event.keyCode == 9
+														|| event.keyCode == 37
+														|| event.keyCode == 39 || event.keyCode == 46)) {
+													event.preventDefault();
+
+												}
+											});
+
+							//Check Max Revision Validation
+							$(document)
+									.on(
+											'keyup focusout',
+											'#copyPreviousrevision .copyRevisionNo',
+											function(event) {
+												$(this).removeClass("error");
+												$(this).closest(".col-xs-7")
+														.find(".errorTxt")
+														.remove();
+												var getMaxRevision = $(document)
+														.find(
+																".copyScheduleRevisionNo option:selected")
+														.attr("max");
+												var copyFor = $(this).val();
+												if (getMaxRevision != 0) {
+													getMaxRevision = parseInt(getMaxRevision);
+												}
+
+												if (copyFor != "") {
+													copyFor = parseInt(copyFor);
+													if (copyFor > getMaxRevision) {
+														$(this).addClass(
+																"error");
+														$(this)
+																.closest(
+																		".col-xs-7")
+																.append(
+																		"<span class='errorTxt'>Max Revision is "
+																				+ getMaxRevision
+																				+ ".");
+													} else {
+														$(this)
+																.closest(
+																		".col-xs-7")
+																.find(
+																		".errorTxt")
+																.remove();
+														$(this).removeClass(
+																"error");
+													}
+
+													if (getMaxRevision == 0) {
+														$(this)
+																.closest(
+																		".col-xs-7")
+																.find(
+																		".errorTxt")
+																.remove();
+													}
+												}
+											});
+
+							//Submit Copy Revision Validation
+							$(document)
+									.on(
+											'click',
+											'#submitDataCopyRevision',
+											function(event) {
+
+												//Check Validation on Copy For Revision No
+												$(document)
+														.find(
+																"#copyPreviousrevision .copyRevisionNo")
+														.trigger("focusout");
+												var copyRevFrom = $(document)
+														.find(
+																"#copyPreviousrevision .copyScheduleRevisionNo")
+														.val();
+												var copyForRev = $(document)
+														.find(
+																'#copyPreviousrevision .copyRevisionNo')
+														.val();
+												var copyForRevTB = $(document)
+														.find(
+																'#copyPreviousrevision .copyRevisionTimeBlock')
+														.val();
+
+												if (copyRevFrom == "") {
+													$(document)
+															.find(
+																	"#copyPreviousrevision .copyScheduleRevisionNo")
+															.addClass("error");
+													return false;
+												} else if (copyForRev == "") {
+													$(document)
+															.find(
+																	"#copyPreviousrevision .copyScheduleRevisionNo")
+															.removeClass(
+																	"error");
+													$(document)
+															.find(
+																	'#copyPreviousrevision .copyRevisionNo')
+															.addClass("error");
+													return false;
+												} else if (copyForRevTB == "") {
+													$(document)
+															.find(
+																	'#copyPreviousrevision .copyRevisionNo')
+															.removeClass(
+																	"error");
+													$(document)
+															.find(
+																	'#copyPreviousrevision .copyRevisionTimeBlock')
+															.addClass("error");
+													return false;
+												} else {
+													$(document)
+															.find(
+																	'#copyPreviousrevision .copyRevisionTimeBlock')
+															.removeClass(
+																	"error");
+													$(document)
+															.find(
+																	"#copyPreviousrevision .copyRevisionNo")
+															.removeClass(
+																	"error");
+													$(document)
+															.find(
+																	'#copyPreviousrevision .copyScheduleRevisionNo')
+															.removeClass(
+																	"error");
+
+													var selector = $(document)
+															.find(
+																	"#copyPreviousrevision .copyScheduleRevisionNo");
+													$(selector).closest(
+															".col-xs-7").find(
+															".errorTxt")
+															.remove();
+													if (copyRevFrom == copyForRev) {
+														$(selector).addClass(
+																"error");
+														$(selector)
+																.closest(
+																		".col-xs-7")
+																.append(
+																		"<span class='errorTxt'>Same revision number shall not be copied.</span>");
+
+													} else {
+														$(selector)
+																.removeClass(
+																		"error");
+														$(selector)
+																.closest(
+																		".col-xs-7")
+																.find(
+																		".errorTxt")
+																.remove();
+
+														//Time Block Validation
+														var selectorRT = $(
+																document)
+																.find(
+																		"#copyPreviousrevision .copyRevisionTimeBlock");
+														$(selectorRT)
+																.closest(
+																		".col-xs-7")
+																.find(
+																		".errorTxt")
+																.remove();
+														var getCurrentRT = GetCurrentTimeHHMM(24);
+														getCurrentRT = getCurrentRT
+																.split(":");
+														var getRT = copyForRevTB;
+														getRT = getRT
+																.split(":");
+
+														if (getRT[0] >= getCurrentRT[0]) {
+
+															if (getRT[0] == getCurrentRT[0]) {
+																if (getRT[1] >= getCurrentRT[1]) {
+																	$(
+																			selectorRT)
+																			.closest(
+																					".col-xs-7")
+																			.find(
+																					".errorTxt")
+																			.remove();
+																} else {
+																	$(
+																			selectorRT)
+																			.closest(
+																					".col-xs-7")
+																			.append(
+																					"<span class='errorTxt'>Rev. from TB should be greater than OR equal to "
+																							+ GetCurrentTimeHHMM(24)
+																							+ "</span>");
+																}
+															} else {
+																$(selectorRT)
+																		.closest(
+																				".col-xs-7")
+																		.find(
+																				".errorTxt")
+																		.remove();
+															}
+														} else {
+															$(selectorRT)
+																	.closest(
+																			".col-xs-7")
+																	.append(
+																			"<span class='errorTxt'>Rev. from TB should be greater than OR equal to "
+																					+ GetCurrentTimeHHMM(24)
+																					+ "</span>");
+														}
+														//Time Block Validation
+
+														if ($(document)
+																.find(
+																		"#copyPreviousrevision .error").length == 0
+																&& $(document)
+																		.find(
+																				"#copyPreviousrevision .errorTxt").length == 0) {
+
+															var poolingStationUid = $(
+																	".poolingStationValue option:selected")
+																	.val();
+
+															//Code Here
+															requestJSONCopyRevision = [];
+															requestJSONCopyRevision
+																	.push({
+																		poolUid : parseInt(poolingStationUid),
+																		copyFromRev : parseInt(copyRevFrom),
+																		copyForRev : parseInt(copyForRev),
+																		reviseFromTB : copyForRevTB
+																	});
+
+															$(
+																	"#copyPreviousrevision")
+																	.modal(
+																			'hide');
+
+															var confirmMessage = 'Do you want to copy Revision '
+																	+ copyRevFrom
+																	+ ' to Revision '
+																	+ copyForRev
+																	+ ' effected from '
+																	+ copyForRevTB;
+															$(
+																	"#confirmCopyRevision")
+																	.find(
+																			"#copyConfirm")
+																	.html(
+																			confirmMessage);
+
+															$(
+																	"#confirmCopyRevision")
+																	.modal(
+																			'show');
+															//Code Here
+														}
+													}
+
+												}
+
+											});
+
+						});
+
+		//Copy Schedule Revision Response Data
+		function getCopyScheduleRevisionResponse(data) {
+			var getRevisionNo = $(document).find(
+					"#copyPreviousrevision .copyRevisionNo").val();
+			var getPoolingStationName = $(document).find(
+					".poolingStationValue option:selected").text();
+			copyStatus = false;
+			var respText = '', statusMesg = '';
+
+			if (data != undefined && data != "") {
+
+				if (data == "success") {
+					statusMesg = "Success";
+					copyStatus = true;
+					respText = getPoolingStationName + ' Revision No. '
+							+ getRevisionNo + ' has been copied successfully.';
+				} else {
+					statusMesg = "Failure";
+					copyStatus = false;
+					respText = getPoolingStationName + ' Revision No. '
+							+ getRevisionNo
+							+ ' has not been copied successfully.';
+				}
+			} else {
+				statusMesg = "Failure";
+				copyStatus = false;
+				respText = 'Unable to perform copy action.';
+			}
+
+			$("#confirmCopyRevisionMessage").find("#myModalLabelConfirm").html(
+					statusMesg);
+			$("#confirmCopyRevisionMessage").find(".confirmContent").html(
+					respText);
+
+			$("#confirmCopyRevision").modal('hide');
+			$("#confirmCopyRevisionMessage").modal("show");
+
+		}
+
+		function bindScheduleRevisionList(psUid, latestRevisionCount) {
+			var maxRevision = 0, copyTimeBlock = 0;
+			var htmlRevision = '<option value="" max="0">-Select Revision No.-</option>';
+			var allRevission = [];
+
+			if (allSchduleRevisionIntervalList != undefined
+					&& allSchduleRevisionIntervalList.length > 0) {
+				$.each(allSchduleRevisionIntervalList, function(i, elem) {
+					allRevission.push(elem.revision)
+
+				});
+
+				//Get max Revision No of Pooling Station
+				maxRevision = Math.max.apply(Math, allRevission);
+
+				copyTimeBlock = (latestRevisionCount)
+
+				//Bind TimeBlock
+				if (copyTimeBlock <= maxRevision) {
+					$
+							.each(
+									allSchduleRevisionIntervalList,
+									function(i, elem) {
+
+										if (copyTimeBlock == elem.revision) {
+											$(document)
+													.find(
+															"#copyPreviousrevision .copyRevisionTimeBlock")
+													.val(elem.reviseTimeblock);
+											$(document)
+													.find(
+															"#copyPreviousrevision .copyRevisionNo")
+													.val(copyTimeBlock);
+										}
+									});
+				} else if (latestRevisionCount == maxRevision) {
+					$
+							.each(
+									allSchduleRevisionIntervalList,
+									function(i, elem) {
+
+										if (maxRevision == elem.revision) {
+											$(document)
+													.find(
+															"#copyPreviousrevision .copyRevisionTimeBlock")
+													.val(elem.reviseTimeblock);
+											$(document)
+													.find(
+															"#copyPreviousrevision .copyRevisionNo")
+													.val(maxRevision);
+										}
+									});
+				}
+
+				//Bind Revision Number
+				if (latestRevisionCount > 0
+						|| (latestRevisionCount == 0 && latestRevisionCount != null)) {
+
+					if (latestRevisionCount == 0) {
+						htmlRevision = '<option value="" max="'+maxRevision+'">-Select Revision No.-</option>';
+						//htmlRevision+='<option value="-1" max="'+maxRevision+'">Revision -1</option>';
+						htmlRevision += '<option value="0" max="'+maxRevision+'">Revision 0</option>';
+					} else {
+						//htmlRevision+='<option value="-1" max="'+maxRevision+'">Revision -1</option>';
+						for (var r = 0; r <= latestRevisionCount; r++) {
+							if (latestRevisionCount == r) {
+								htmlRevision += '<option value="'+r+'" max="'+maxRevision+'" selected="selected">Revision '
+										+ r + '</option>';
+							} else {
+								htmlRevision += '<option value="'+r+'" max="'+maxRevision+'">Revision '
+										+ r + '</option>';
+							}
+						}
+					}
+				} else {
+					htmlRevision = '<option value="" max="'+maxRevision+'">-Select Revision No.-</option>';
+				}
+
+				$(document).find(
+						"#copyPreviousrevision .copyScheduleRevisionNo").html(
+						htmlRevision);
+				//Bind Revision Number
+
+			}
+
+		}
+
+		function GetCurrentTimeHHMM(formate) {
+			var getTime = '';
+			var date = new Date();
+
+			if (formate == '12') {
+				var hours = date.getHours() > 12 ? date.getHours() - 12 : date
+						.getHours();
+				var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+				hours = hours < 10 ? "0" + hours : hours;
+				var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes()
+						: date.getMinutes();
+				var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds()
+						: date.getSeconds();
+				getTime = hours + ":" + minutes;
+				//getTime = hours + ":" + minutes + ":"+seconds+" "+ am_pm;
+			}
+			if (formate == '24') {
+				var hours = date.getHours() < 10 ? "0" + date.getHours() : date
+						.getHours();
+				var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+				var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes()
+						: date.getMinutes();
+				var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds()
+						: date.getSeconds();
+				getTime = hours + ":" + minutes;
+			}
+			return getTime;
+		}
+		/*Copy Revision Inerval*/
+		//					    	var getRevisionNo=$(document).find("#copyPreviousrevision .copyRevisionNo").val();
+		function downloadExel() {
+			var poolinStationName = $('.poolingStationValue').val();
+			var todate = $('#rangeDatefrom').val();
+			var DateForredirect = $('#todate').text();
+
+			window.location.href = "${pageContext.request.contextPath}/schedules?DownloadExelByPoolingStationAndForecastDateEquals&poolingStation="
+					+ poolinStationName
+					+ "&forecastDate="
+					+ todate
+					+ "&forecastDatefrom=" + todate;
+
+		}
+
+		var scheduleBlockDataList = '';
+
+		$('#submitDataImportData')
+				.click(
+						function(e) {
+							var form = document.forms[0];
+							var formData = new FormData();
+							formData.append("file",
+									$(".uploadfilenameSchedule")[0].files[0]);
+							formData
+									.append("date", $(".uploadStartDate").val());
+							formData.append("pname", $(".uploadPSUid").val());
+							formData.append("revno", $(".uploadrevisionNo")
+									.val());
+							var url = "${pageContext.request.contextPath}/schedules/fileUploaddata";
+							// AjaxCallingMethod(url,formData,"a");
+							// Ajax call for file uploaling
+							var ajaxReq = $
+									.ajax({
+										url : url,
+										type : 'POST',
+										data : formData,
+										enctype : 'multipart/form-data',
+										cache : false,
+										contentType : false,
+										processData : false,
+										success : function(data) {
+											console.log(data);
+
+											scheduleBlockDataList = data[0].scheduleBlockList;
+											bindScheduleData(
+													data[0].scheduleBlockModelList,
+													data);
+
+										},
+										error : function(e) {
+
+										}
+									});
+						});
+
+		function bindScheduleData(data, dataVal) {
+
+			var tableHtml = '';
+
+			tableHtml += '<table><head><tr><td>Block No.</td> <td>Intra State Declared Quantum(mw) Old Data</td><td>Intra State Declared Quantum(mw) New Data</tr></head>';
+			var data = JSON.parse(data);
+			for (var i = 0; i < data.length; i++) {
+				tableHtml += '<tr><td>' + data[i].timeBlock + '</td><td>'
+						+ data[i].dataBasePowerValue + '</td> <td>'
+						+ data[i].fileFloatValue + '</td></tr>';
+			}
+			tableHtml += '</table>';
+			$('#scheduleTable').html(tableHtml);
+			if (data.length > 0) {
+				$('#scheduleDatamodel').modal('show');
+			} else {
+				var status = dataVal[0].status[0];
+				alert(status);
+				$('#fileUploadModel').modal('hide');
+				a = "";
+				location.reload();
+
+			}
+		}
+
+		$('#submitScheduleData')
+				.click(
+						function(e) {
+							var urlval = "${pageContext.request.contextPath}/schedules/saveScheduleBlock";
+							try {
+								$
+										.ajax({
+											type : 'POST',
+											url : "${pageContext.request.contextPath}/schedules/saveScheduleBlock",
+											data : scheduleBlockDataList,
+											contentType : "application/json; charset=utf-8",
+											success : function(data) {
+												alert("DATA SAVE SUCCESSFULLY IN DATABASE");
+												a = "";
+												location.reload();
+												//console.log(data ); 
+											},
+											error : function(error) {
+												alert('error; ' + eval(error));
+											}
+										});
+							} catch (ex) {
+								console.log(ex, 'Error')
+
+							}
+
+						});
+
+		function AjaxCallingMethodPost(methodName, jsondata) {
+			try {
+				$.ajax({
+					type : "POST",
+					url : methodName,
+					data : jsondata,
+					contentType : "application/json; charset=utf-8",
+					success : function(data) {
+						console.log(data);
+					}
+				});
+			} catch (ex) {
+				console.log(ex, 'Error')
+
+			}
+
+		}
+		
+		
+		var portalScheduleSendStatus=false;	
+		var poolingStationRaj="${poolingStationPoetal}";
+		
+			
+			
+			
+			
+			$('.scheduleSubmit').click(function(){
+				var jsondata = '';
+				var json = '[';
+				json += '{';
+				var datevalue = $('#rangeDateto').val();
+				var poolinStationName = $('.poolingStationValue').val();
+				var revno = $('.revision').val();
+				var todate = $('#rangeDatefrom').val();
+				var DateForredirect = $('#rangeDateto').text();
+				var poolinStationNameForRedirect = $('.poolingStationValue').val();
+				json += '"date":"' + datevalue + '"';
+				json += ',"todate":"' + todate + '"';
+				json += ',"DateForredirect":"' + DateForredirect + '"';
+				json += ',"poolinStationNameForRedirect":"'
+						+ poolinStationNameForRedirect + '"';
+				json += ',"poolinstationName":"' + poolinStationName + '"';
+				json += ',"revno":"' + revno + '"';
+				json += '}';
+				json += ']';
+
+				jsondata = json;
+				AjaxCalling(
+						"${pageContext.request.contextPath}/schedules/sendEmailToSldcRajsthan",
+						jsondata, rajsthanEmailResponse);
+
+				
+    //Some code
+});
+			
+			
+			
+			function rajsthanEmailResponse(data) {
+				console.log(data);
+				alert(data.StatusP)
+				
+				if(data.StatusP=="Schedule Sent SuccessFully")
+					{
+					 $(".scheduleSubmit").hide();
+					 
+					
+					}
+				else
+					{
+					$(".scheduleSubmit").show();
+					}
+				
+				
+				
+			}
+			
+			
+			
+			
+
+		//]]>
+	</script>
+</div>

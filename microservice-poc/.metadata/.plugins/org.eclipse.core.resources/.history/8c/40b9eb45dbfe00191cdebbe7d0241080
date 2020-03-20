@@ -1,0 +1,137 @@
+package com.hertz.solar.controller;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import javax.ws.rs.core.MediaType;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.codehaus.jettison.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.hertz.solar.entity.ScadaConfigration;
+import com.hertz.solar.service.ScadaAutomationConfigurationService;
+import com.hertz.solar.utility.FileReaderUtility;
+
+@RestController
+public class ScadaAutomationController {
+
+	@javax.annotation.Resource
+	private ScadaAutomationConfigurationService scadaConfigurationService;
+
+	@javax.annotation.Resource
+	private FileReaderUtility fileReaderUtility;
+
+	private static final Logger logger = LogManager.getLogger(ScadaAutomationController.class.getName());
+
+	@Value("${scadaAutomationConfigfile.upload.path}")
+	String fileUploadPath;
+
+	@RequestMapping(value = "/scadaAutomation")
+	public ModelAndView scadaAutomation() {
+		
+		ModelAndView model = new ModelAndView();
+		model.setViewName("scadaAutomation");
+		return model;
+	}
+
+	// Handling file upload request
+	@RequestMapping(value = "/fileUploadScadaAutomation/{fileType}", method = RequestMethod.POST, consumes = {
+			"multipart/form-data" })
+	public ResponseEntity<String> fileUploadScadaAutomation(@RequestParam("file") MultipartFile file,
+			@PathVariable("fileType") String fileType) throws IOException {
+		logger.info("In fileUpload");
+		logger.error("In fileUpload");
+		String returnData = new String();
+		String fileName = "{\"status\":\"FAIL\"}";
+		try {
+			if (!file.isEmpty()) {
+				try {
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(new File(fileUploadPath + file.getOriginalFilename())));
+					FileCopyUtils.copy(file.getInputStream(), stream);
+					stream.close();
+					JSONObject jsonObject = new JSONObject();
+					jsonObject = fileReaderUtility
+							.readFileByFilePathAndFileType(fileUploadPath + file.getOriginalFilename(), fileType);
+					/*
+					 * switch (fileName1) { case "csv": jsonObject = FileUtility
+					 * .parseCSVFileForScadaAutomation(fileUploadPath + file.getOriginalFilename());
+					 * break; case "xls": jsonObject = FileUtility
+					 * .parseXLSFileForScadaAutomation(fileUploadPath + file.getOriginalFilename());
+					 * break; case "xlsx": jsonObject = FileUtility
+					 * .parseXLSXFileForScadaAutomation(fileUploadPath +
+					 * file.getOriginalFilename()); break; }
+					 */
+					if (jsonObject.length() > 0 && jsonObject != null) {
+						returnData = jsonObject.toString();
+					}
+					fileName = "{\"status\":\"SUCCESS\",\"fileName\":\"" + file.getOriginalFilename() + "\"}";
+				} catch (IOException e) {
+					// logger.error("File is not empty exception "+e);
+					return new ResponseEntity<String>(fileName, HttpStatus.OK);
+				}
+			} else {
+				// logger.error("File is empty");
+				return new ResponseEntity<>(fileName, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+
+			// logger.error("File is not empty exception 1 "+e);
+			return new ResponseEntity<>(fileName, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(returnData, HttpStatus.OK);
+	}
+
+//				public static HashMap<String, HSSFSheet> readExcelXls(String filePath) {
+//					HashMap<String, HSSFSheet> xssfSheets = null;
+//					try {
+//						FileInputStream inputStream = new FileInputStream(filePath);
+//						xssfSheets = new HashMap<>();
+//						// Get the workbook instance for XLS file
+//						Workbook workbook = WorkbookFactory.create(new File(filePath));
+//						for (int i=0;i<workbook.getNumberOfSheets();i++) {
+//							HSSFSheet xssfSheet=(HSSFSheet) workbook.getSheetAt(i);
+//							xssfSheets.put(xssfSheet.getSheetName(), xssfSheet);
+//						}
+//					} catch (Exception e) {
+//						logger.error(e.getMessage());				
+//					}
+//					return xssfSheets;
+//				}
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<String> save(@RequestBody ScadaConfigration scadaConfigration) {
+		HttpHeaders responseHeaders = new HttpHeaders();
+		ScadaConfigration scadaConfig = null;
+
+		try {
+			scadaConfig = this.scadaConfigurationService.saveScadaConfiguration(scadaConfigration);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		if (scadaConfig != null) {
+			return new ResponseEntity<String>(responseHeaders, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>(responseHeaders, HttpStatus.METHOD_FAILURE);
+		}
+
+	}
+
+}

@@ -1,0 +1,17 @@
+package com.hertz.solar.serviceimpl;
+
+import org.springframework.stereotype.Service;
+
+import com.hertz.solar.entity.ScadaConfig;
+import com.hertz.solar.service.ScadaConfigService;
+
+@Service("scadaConfigService")
+public class ScadaConfigServiceImpl implements ScadaConfigService {
+
+	@Override
+	public ScadaConfig saveScadaConfiguration(ScadaConfig scadaconfig) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

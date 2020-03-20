@@ -1,0 +1,26 @@
+package com.hertz.solar.entity;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+@Document(collection = "scada_config")
+public class ScadaConfig {
+	
+	@Id
+	@Field("_id")
+	private String id;
+	
+	@Field("source")
+	private String source;
+	
+	@Field("pooling_station")
+	private String poolingStation;
+	
+	@Field("scada_automation_rule")
+	private String scadaAutomationRule;
+	
+	
+	
+
+}

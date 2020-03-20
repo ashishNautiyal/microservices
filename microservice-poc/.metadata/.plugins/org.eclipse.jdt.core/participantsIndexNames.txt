@@ -1,0 +1,9 @@
+INDEX VERSION 1.131
+/home/user/microservice-poc/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/3491636414.index
+/new-re-1/src/main/java
+/home/user/microservice-poc/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1186555444.index
+/new-re-1/src/main/java
+/home/user/microservice-poc/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1914126268.index
+/spring-boot-web-jsp/src/test/java
+/home/user/microservice-poc/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1207772304.index
+/new-re/src/main/java
